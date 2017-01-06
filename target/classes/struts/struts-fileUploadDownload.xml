@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="default" extends="struts-default">
+	    <action name="fileAction" class="com.chenyb.action.UpDownAction">
+			<result name="success">/upload.jsp</result>
+		</action>
+		 <action name="fileAction1" class="com.chenyb.action.UpDownAction">
+			<result name="success">/upload.jsp</result>
+			<result name="toUpload">/upload.jsp</result>
+		</action>
+		<action name="upload" class="com.chenyb.action.UpDownAction" method="uploadFile">
+			<result name="success">/upload.jsp</result>
+			<result name="input">/upload.jsp</result>
+			<interceptor-ref name="fileUpload">
+				<!--maximumSize (可选) - 这个拦截器允许的上传到action中的文件最大长度(以byte为单位). 注意这个参数和在webwork.properties中定义的属性没有关系,默认2MB -->
+				<param name="maximumSize">40960000</param>
+				<!--allowedTypes (可选) - 以逗号分割的contentType类型列表(例如text/html), 这些列表是这个拦截器允许的可以传到action中的contentType.如果没有指定就是允许任何上传类型. -->
+				<param name="allowedTypes">
+					text/plain,image/bmp,image/png,image/gif,image/jpg,application/octet-stream
+      				image/pjpeg ,image/bmp, image/gif, image/x-png,text/xml,application/xml,application/zip
+				</param>
+			</interceptor-ref>
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		
+		<action name="download" class="com.chenyb.action.UpDownAction" method="downloadMyFile">
+		   <!--  <result name="input" type="stream"/> -->
+			<result name="success" type="stream">
+				<!--指定文件下载类型 application/octet-stream默认值可以下载所有类型 -->
+				<param name="contentType">
+					text/plain,application/txt
+				</param>
+				<!-- 指定下载的文件名和显示方式 ，但注意中文名的乱码问题，解决办法是：进行编码处理 -->
+				<!--contentDisposition是文件下载的处理方式，包括内联(inline)和附件(attachment)， 默认是inline, 
+					使用附件时这样配置：attachment;filename="文件名" 。 ${fileName}-->
+				<param name="contentDisposition">
+					attachment;filename="${fileName}"
+				</param>
+				<!--由getDownloadFile()方法获得inputStream -->
+				<param name="inputName">downloadFile</param>
+				<!-- 指定下载文件的缓存大小 -->
+				<param name="bufferSize">2048</param>
+			</result>
+		</action>
+	</package>
+</struts>

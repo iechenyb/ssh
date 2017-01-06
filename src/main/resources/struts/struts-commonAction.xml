@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <!-- uri = my/action/user.action -->
+	<package name="" namespace="/my" extends="struts-default" >
+	    <!-- 定义一个拦截器 -->  
+        <interceptors>  
+            <interceptor name="authority"  
+                class="com.chenyb.interceptor.LoginInterceptor">  
+            </interceptor>  
+            <!-- 拦截器栈 -->  
+            <interceptor-stack name="mydefault">  
+               <!--  <interceptor-ref name="defaultStack" />   -->
+                <interceptor-ref name="authority" />  
+            </interceptor-stack>  
+        </interceptors>  
+	     <!-- 定义全局Result -->  
+        <global-results>  
+            <!-- 当返回login视图名时，转入/login.jsp页面 -->  
+            <result name="login">/register.jsp</result>  
+        </global-results> 
+		<action name="uri" class="com.chenyb.action.UriAction">
+			<result name="success">/register.jsp</result>
+			<result name="fail">/registerFail.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mydefault" />  
+		</action>
+		<action name="uriAnn" class="uriAction"><!-- @Component("userAction") -->
+			<result name="success">/register.jsp</result>
+			<result name="fail">/registerFail.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mydefault" />  
+		</action>
+		<!-- method 请求时 回调用 method=add的方法 -->
+        <action name="uriAdd" class="uriAction" method="add"  > 
+            <result name="success">/register.jsp</result>
+			<result name="fail">/registerFail.jsp</result>
+			<!-- 使用此拦截器 -->  
+            <interceptor-ref name="mydefault" />  
+        </action>
+	</package>
+</struts>
